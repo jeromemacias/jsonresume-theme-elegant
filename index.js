@@ -8,10 +8,47 @@ var markdown = require('markdown-it')({
 }).use(require('markdown-it-abbr'));
 
 require('./moment-precise-range.js');
+moment.locale('fr');
 
-utils.setConfig({
-    date_format: 'MMM YYYY'
-});
+function getFormattedDate(date, date_format) {
+    date_format = date_format || 'MMM YYYY';
+
+    return moment(date).format(date_format);
+}
+
+function humanizeDuration(duration) {
+   var days,
+       months = duration.months(),
+       years = duration.years(),
+       month_str = months > 1 ? 'mois' : 'mois',
+       year_str = years > 1 ? 'ans' : 'an';
+
+    if ( months && years ) {
+        return years + ' ' + year_str + ' ' + months + ' ' + month_str;
+    }
+
+    if ( months ) {
+        return months + ' ' + month_str;
+    }
+
+    if ( years ) {
+        return years + ' ' + year_str;
+    }
+
+    days = duration.days();
+
+    return ( days > 1 ? days + ' jours' : days + ' jour' );
+}
+
+function getDuration(start_date, end_date, humanize) {
+    var duration;
+
+    start_date = new Date(start_date);
+    end_date = new Date(end_date);
+    duration = moment.duration(end_date.getTime() - start_date.getTime());
+
+    return (humanize ? humanizeDuration(duration) : duration);
+}
 
 function interpolate(object, keyPath) {
     var keys = keyPath.split('.');
@@ -57,19 +94,17 @@ function getFloatingNavItems(resume) {
 }
 
 function render(resume) {
-    var addressValues;
-    var addressAttrs = ['address', 'city', 'region', 'countryCode', 'postalCode'];
     var css = fs.readFileSync(__dirname + '/assets/css/theme.css', 'utf-8');
+    var addressValues = resume.basics.location;
 
     resume.basics.picture = utils.getUrlForPicture(resume);
-
     addressValues = _(addressAttrs).map(function(key) {
         return resume.basics.location[key];
     });
 
     resume.basics.summary = convertMarkdown(resume.basics.summary);
 
-    resume.basics.computed_location = _.compact(addressValues).join(', ');
+    resume.basics.computed_location = addressValues['address'] + ', ' + addressValues['postalCode'] + ' ' + addressValues['city'];
 
     if (resume.languages) {
         resume.basics.languages = _.pluck(resume.languages, 'language').join(', ');
@@ -124,7 +159,7 @@ function render(resume) {
             var date = education_info[type];
 
             if (date) {
-                education_info[type] = utils.getFormattedDate(date);
+                education_info[type] = getFormattedDate(date);
             }
         });
     });
@@ -135,7 +170,7 @@ function render(resume) {
         award.summary = convertMarkdown(award.summary);
 
         if (date) {
-            award.date = utils.getFormattedDate(date, 'DD MMM YYYY');
+            award.date = getFormattedDate(date, 'DD MMM YYYY');
         }
     });
 
@@ -146,7 +181,7 @@ function render(resume) {
             var date = volunteer_info[type];
 
             if (date) {
-                volunteer_info[type] = utils.getFormattedDate(date);
+                volunteer_info[type] = getFormattedDate(date);
             }
         });
 
@@ -161,7 +196,7 @@ function render(resume) {
         publication_info.summary = convertMarkdown(publication_info.summary);
 
         if (date) {
-            publication_info.releaseDate = utils.getFormattedDate(date, 'DD MMM YYYY');
+            publication_info.releaseDate = getFormattedDate(date, 'DD MMM YYYY');
         }
     });
 
