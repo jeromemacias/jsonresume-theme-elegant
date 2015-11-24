@@ -10,7 +10,7 @@ var markdown = require('markdown-it')({
 require('./moment-precise-range.js');
 
 utils.setConfig({
-    date_format: 'MMM, YYYY'
+    date_format: 'MMM YYYY'
 });
 
 function interpolate(object, keyPath) {
@@ -38,15 +38,15 @@ function convertMarkdown(str) {
 
 function getFloatingNavItems(resume) {
     var floating_nav_items = [
-        {label: 'About', target: 'about', icon: 'board', requires: 'basics.summary'},
-        {label: 'Work Experience', target: 'work-experience', icon: 'office', requires: 'work'},
-        {label: 'Skills', target: 'skills', icon: 'tools', requires: 'skills'},
-        {label: 'Education', target: 'education', icon: 'graduation-cap', requires: 'education'},
-        {label: 'Awards', target: 'awards', icon: 'trophy', requires: 'awards'},
-        {label: 'Volunteer Work', target: 'volunteer-work', icon: 'child', requires: 'volunteer'},
+        {label: 'À propos', target: 'about', icon: 'board', requires: 'basics.summary'},
+        {label: 'Expérience professionelle', target: 'work-experience', icon: 'office', requires: 'work'},
+        {label: 'Compétences', target: 'skills', icon: 'tools', requires: 'skills'},
+        {label: 'Formation', target: 'education', icon: 'graduation-cap', requires: 'education'},
+        {label: 'Récompenses', target: 'awards', icon: 'trophy', requires: 'awards'},
+        {label: 'Volontariat', target: 'volunteer-work', icon: 'child', requires: 'volunteer'},
         {label: 'Publications', target: 'publications', icon: 'newspaper', requires: 'publications'},
-        {label: 'Interests', target: 'interests', icon: 'heart', requires: 'interests'},
-        {label: 'References', target: 'references', icon: 'thumbs-up', requires: 'references'}
+        {label: 'Intérêts', target: 'interests', icon: 'heart', requires: 'interests'},
+        {label: 'Références', target: 'references', icon: 'thumbs-up', requires: 'references'}
     ];
 
     return _(floating_nav_items).filter(function(item) {
@@ -110,7 +110,7 @@ function render(resume) {
     });
 
     _.each(resume.skills, function(skill_info) {
-        var levels = ['Beginner', 'Intermediate', 'Advanced', 'Master'];
+        var levels = ['Débutant', 'Intermédiaire', 'Avancé', 'Confirmé'];
 
         if (skill_info.level) {
             skill_info.skill_class = skill_info.level.toLowerCase();
@@ -135,7 +135,7 @@ function render(resume) {
         award.summary = convertMarkdown(award.summary);
 
         if (date) {
-            award.date = utils.getFormattedDate(date, 'MMM DD, YYYY');
+            award.date = utils.getFormattedDate(date, 'DD MMM YYYY');
         }
     });
 
@@ -161,7 +161,7 @@ function render(resume) {
         publication_info.summary = convertMarkdown(publication_info.summary);
 
         if (date) {
-            publication_info.releaseDate = utils.getFormattedDate(date, 'MMM DD, YYYY');
+            publication_info.releaseDate = utils.getFormattedDate(date, 'DD MMM YYYY');
         }
     });
 

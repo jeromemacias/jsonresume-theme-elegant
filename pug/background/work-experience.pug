@@ -2,10 +2,10 @@ unless _.isEmpty(resume.work)
   .detail#work-experience
     .icon
       i.fs-lg.icon-office
-      span.mobile-title Work Experience
+      span.mobile-title Expérience professionelle
 
     .info
-      h4.title.text-uppercase Work Experience
+      h4.title.text-uppercase Expérience professionelle
 
       ul.list-unstyled.clear-margin
         each experience in resume.work
@@ -15,7 +15,7 @@ unless _.isEmpty(resume.work)
                 if !experience.endDate
                   i.icon-circle.current-event(
                     rel="tooltip",
-                    title="Currently Working",
+                    title="Expérience actuelle",
                     data-placement="left"
                   )
                 strong= experience.position
@@ -28,7 +28,7 @@ unless _.isEmpty(resume.work)
               p.text-muted
                 small
                   span.space-right
-                    |#{experience.startDate} - #{experience.endDate || 'Present'}
+                    |#{experience.startDate} - #{experience.endDate || 'Aujourd\'hui'}
 
                   if experience.duration
                     span

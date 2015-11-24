@@ -2,10 +2,10 @@ unless _.isEmpty(resume.education)
   .detail#education
     .icon
       i.fs-lg.icon-graduation-cap
-      span.mobile-title Education
+      span.mobile-title Formation
 
     .info
-      h4.title.text-uppercase Education
+      h4.title.text-uppercase Formation
 
       .content
         ul.list-unstyled.clear-margin
@@ -16,7 +16,7 @@ unless _.isEmpty(resume.education)
                   if !education_info.endDate
                     i.icon-circle.current-event(
                       rel="tooltip",
-                      title="Currently Pursuing",
+                      title="Actuellement",
                       data-placement="left"
                     )
 
@@ -26,7 +26,7 @@ unless _.isEmpty(resume.education)
 
                 p.text-muted(class=!education_info.gpa && _.isEmpty(education_info.courses) ? 'clear-margin' : '')
                   small
-                    |#{education_info.startDate} - #{education_info.endDate || 'Present'}
+                    |#{education_info.startDate} - #{education_info.endDate || 'Aujourd\'hui'}
                 i= education_info.gpa
 
                 unless _.isEmpty(education_info.courses)
