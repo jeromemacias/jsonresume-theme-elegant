@@ -60,15 +60,10 @@ function getFloatingNavItems(resume) {
 }
 
 function render(resume) {
-    var addressValues;
-    var addressAttrs = ['address', 'city', 'region', 'countryCode', 'postalCode'];
+    var addressValues = resume.basics.location;
     var css = fs.readFileSync(__dirname + '/assets/css/theme.css', 'utf-8');
 
     resume.basics.picture = utils.getUrlForPicture(resume);
-
-    addressValues = _(addressAttrs).map(function(key) {
-        return resume.basics.location[key];
-    });
 
     resume.basics.summary = convertMarkdown(resume.basics.summary);
 
