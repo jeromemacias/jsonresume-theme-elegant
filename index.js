@@ -16,40 +16,6 @@ function getFormattedDate(date, date_format) {
     return moment(date).format(date_format);
 }
 
-function humanizeDuration(duration) {
-   var days,
-       months = duration.months(),
-       years = duration.years(),
-       month_str = months > 1 ? 'mois' : 'mois',
-       year_str = years > 1 ? 'ans' : 'an';
-
-    if ( months && years ) {
-        return years + ' ' + year_str + ' ' + months + ' ' + month_str;
-    }
-
-    if ( months ) {
-        return months + ' ' + month_str;
-    }
-
-    if ( years ) {
-        return years + ' ' + year_str;
-    }
-
-    days = duration.days();
-
-    return ( days > 1 ? days + ' jours' : days + ' jour' );
-}
-
-function getDuration(start_date, end_date, humanize) {
-    var duration;
-
-    start_date = new Date(start_date);
-    end_date = new Date(end_date);
-    duration = moment.duration(end_date.getTime() - start_date.getTime());
-
-    return (humanize ? humanizeDuration(duration) : duration);
-}
-
 function interpolate(object, keyPath) {
     var keys = keyPath.split('.');
 
@@ -94,10 +60,12 @@ function getFloatingNavItems(resume) {
 }
 
 function render(resume) {
+    var addressValues;
+    var addressAttrs = ['address', 'city', 'region', 'countryCode', 'postalCode'];
     var css = fs.readFileSync(__dirname + '/assets/css/theme.css', 'utf-8');
-    var addressValues = resume.basics.location;
 
     resume.basics.picture = utils.getUrlForPicture(resume);
+
     addressValues = _(addressAttrs).map(function(key) {
         return resume.basics.location[key];
     });
@@ -130,11 +98,11 @@ function render(resume) {
         }
 
         if (start_date.isValid()) {
-          work_info.startDate = utils.getFormattedDate(start_date);
+          work_info.startDate = utils.getFormattedDate(start_date, 'MMM YYYY');
         }
 
         if (end_date.isValid()) {
-          work_info.endDate = utils.getFormattedDate(end_date);
+          work_info.endDate = utils.getFormattedDate(end_date, 'MMM YYYY');
         }
 
         work_info.summary = convertMarkdown(work_info.summary);
@@ -181,7 +149,7 @@ function render(resume) {
             var date = volunteer_info[type];
 
             if (date) {
-                volunteer_info[type] = getFormattedDate(date);
+                volunteer_info[type] = getFormattedDate(date, 'DD MMM YYYY');
             }
         });
 
